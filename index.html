@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АниВики</title>
+    <link rel="icon" href="https://media2.giphy.com/media/a6pzK009rlCak/200w.gif?cid=6c09b952jkc9jd5jkknrcv33fyrssinkr4uoo91bsqiq87q3&ep=v1_gifs_search&rid=200w.gif&ct=g" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <style>
+         body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #141414;
+            color: #fff;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* Запретить выделение текста */
+        }
+
+        header {
+            background-color: #1a1a1a;
+            padding:15px;
+            border-bottom: 1px solid #444;
+           
+        }
+        .logo {
+            font-size: 40px;
+            color: #ff4c4c;
+            text-align: left;
+            margin: 5px 100px 25px 100px;
+        }
+        .logo span {
+            color: #fff;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content:right;
+            padding:0;
+          margin-right: 100px;
+        }
+        nav ul li {
+            position: relative;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #ff4c4c; 
+        }
+        nav ul li a.active {
+    color: #fff; /* Цвет текста активной ссылки */
+    background-color: #ff4c4c; /* Цвет фона активной ссылки */
+    padding: 10px 15px; /* Отступы для улучшения внешнего вида */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+        .dropdown-menu {
+            display: none; 
+            position: absolute; 
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+            max-height: 175px; 
+            max-width: 200px;
+            overflow-y: auto; 
+            margin-left: -40px;
+        }
+
+        nav ul li:hover .dropdown-menu {
+            display: block; 
+        }
+
+        .dropdown-menu a {
+            font-size: 16px;
+            color: #fff;
+            display: block;
+            padding: 5px 10px;
+            transition: background-color  0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: black;
+        }
+
+        .dropdown-menu :focus {
+    outline: none;
+    border-color: #ff4c4c;
+    box-shadow: 0 0 8px rgba(255, 76, 76, 0.8); /* Light glow around the dropdown items */
+}
+        .hero {
+            background-image: url('https://grizly.club/sec2/uploads/posts/2024-02/grizly-club-p-krasivie-oboi-art-devochki-anime-44.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Затемнение для контраста текста */
+            z-index: 1;
+        }
+
+        .hero h2, .hero p, .hero a {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+
+        .cta {
+            background-color: #ff4c4c;
+            color: #fff;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .cta:hover {
+            background-color: #ff1a1a;
+            transform: scale(1.1); /* Анимация увеличения при наведении */
+            box-shadow: 0px 4px 15px rgba(255, 75, 75, 0.6); /* Тень при наведении */
+        }
+
+        .anime-grid {
+            padding: 50px 0;
+        }
+
+        .anime-grid h2 {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 36px;
+            color: #ff4c4c;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    max-width: 280px; /* Установите максимальную ширину */
+    max-height: 380px;
+    margin: auto; /* Центрирование карточки */
+    position: relative; /* Для корректного позиционирования текста */
+}
+
+        .card:hover {
+            transform: scale(1.05);
+            opacity: 1; /* Изображение становится полностью видимым при наведении */
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            pointer-events: none; /* Отключить события мыши для изображений */
+            opacity: 0.6; /* Установите значение прозрачности для изображения (0.0 - 1.0) */
+            transition: opacity 0.3s; /* Добавьте плавный переход для эффекта при наведении */
+        }
+
+        .card-content {
+            position: absolute; /* Убедитесь, что контент расположен относительно карточки */
+    z-index: 1; /* Установите высокий z-index, чтобы текст был выше изображения */
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный фон для текста */
+    bottom: 0; /* Прижмите к низу карточки */
+            left: 0;
+            right: 0;
+    padding: 0px; /* Добавьте отступы для текста */
+    border-radius: 5px; /* Закруглите углы фона текста */
+            
+        }
+
+        .card-content h3 {
+            margin-bottom: 3px;
+            color: #ff4c4c;
+            font-size: 14px;
+        }
+        .card-content p {
+    margin: 3px 0; /* Уменьшите отступы для параграфов */
+    font-size: 14px; /* Уменьшите размер шрифта для параграфов */
+}
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #444;
+        }
+
+        footer p {
+            margin: 0;
+        }
+         /* Модальное окно для видео */
+         .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.8); 
+        }
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 80%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .close {
+            position: absolute;
+            top: -60px;
+            right: -100px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        nav ul li a.active {
+    color: #fff; /* Цвет текста активной ссылки */
+    background-color: #ff4c4c; /* Цвет фона активной ссылки */
+    padding: 10px 15px; /* Отступы для улучшения внешнего вида */
+    border-radius: 5px; /* Закругленные углы */
+}
+.close:hover,
+        .close:focus {
+            color: #ff4c4c; /* Цвет при наведении */
+        }
+        .new-tab-button {
+            background: linear-gradient(135deg, #6b5b95, #feb236);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .new-tab-button:hover {
+            background: linear-gradient(135deg, #feb236, #6b5b95);
+            transform: scale(1.05);
+        }
+
+        /* Стиль для выпадающего меню */
+       /* Стиль для выпадающего меню */
+.dropdown {
+    display: none;
+    position: pointer; /* Измените на absolute, чтобы меню позиционировалось относительно карточки */
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+   padding: auto;
+    border-radius: 5px;
+    z-index: 1000;
+    top: 100%; /* Измените на 100%, чтобы меню отображалось под кнопкой */
+    left: 0;
+    width: 100%;
+}
+
+.dropdown.show {
+    display: block;
+}
+
+.dropdown button {
+    background-color: #ff4c4c;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.dropdown button:hover {
+    background-color: #feb236;
+}
+
+
+.new-tab-button,
+.new-tab-button:focus {
+    outline: none; /* Убираем стандартный стиль при фокусировке */
+}
+.search-container {
+    display: flex;
+    justify-content: flex-start;
+margin: 0 70px 0 -250px;
+
+}
+
+#searchInput {
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    width: 220px;
+    margin-right: 8px;
+    background-color: #333;
+    color: white;
+ 
+}
+
+#searchInput:focus {
+    border-color: #ff4c4c;
+    outline: none;
+}
+
+#searchButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4c4c;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-right:-50px ;
+}
+
+#searchButton:hover {
+    background-color: #ff6767;
+    transform: scale(1.05);
+}
+.profile-button-container {
+    position: absolute; /* Абсолютное позиционирование */
+    top: 15px; /* Отступ сверху */
+    right: 15px; /* Отступ справа */
+}
+
+.profile-avatar {
+    width: 50px; /* Ширина аватара */
+    height: 50px; /* Высота аватара */
+    border-radius: 50%; /* Круглая форма */
+    border: 2px solid #59ffb9; /* Цвет обводки */
+    cursor: pointer; /* Указатель при наведении */
+    margin-right: 20px;
+    margin-top: 10px;
+}
+    </style>
+</head>
+<body>
+
+
+    <header>
+        
+        <div class="container">
+            <h1 class="logo">Ани<span>Вики</span></h1>
+
+            <nav>
+                <ul>
+                    <li>
+                        
+                            <div class="search-container">
+                                <input type="text" id="searchInput" placeholder="Поиск аниме..." />
+                                <button id="searchButton">Поиск</button>
+                            </div>
+                       
+                    </li>
+                    
+                    <li><a href="#" data-lang="home">Главная</a></li>
+                    <li><a href="СписокАниме.html" data-lang="anime-list">Список аниме</a></li>
+                    <li>
+                        <a href="#" data-lang="genres">Жанры</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-genre="all" class="genre-link">Все</a></li>
+                            <li><a href="#" data-genre="action" class="genre-link">Экшн</a></li>
+                            <li><a href="#" data-genre="fantasy" class="genre-link">Фэнтези</a></li>
+                            <li><a href="#" data-genre="romance" class="genre-link">Романтика</a></li>
+                            <li><a href="#" data-genre="adventure" class="genre-link">Приключения</a></li>
+                            <li><a href="#" data-genre="drama" class="genre-link">Драма</a></li>
+                            <li><a href="#" data-genre="comedy" class="genre-link">Комедия</a></li>
+                            <li><a href="#" data-genre="horror" class="genre-link">Ужасы</a></li>
+                            <li><a href="#" data-genre="sci-fi" class="genre-link">Научная фантастика</a></li>
+                            <li><a href="#" data-genre="mystery" class="genre-link">Мистика</a></li>
+                            <li><a href="#" data-genre="slice-of-life" class="genre-link">Повседневность</a></li>
+                            <li><a href="#" data-genre="psychological" class="genre-link">Психологический</a></li>
+                            <li><a href="#" data-genre="supernatural" class="genre-link">Сверхъестественное</a></li>
+                            <li><a href="#" data-genre="mecha" class="genre-link">Меха</a></li>
+                            <li><a href="#" data-genre="sports" class="genre-link">Спорт</a></li>
+                            <li><a href="#" data-genre="historical" class="genre-link">Исторический</a></li>
+                            <li><a href="#" data-genre="martial-arts" class="genre-link">Боевые искусства</a></li>
+                            <li><a href="#" data-genre="military" class="genre-link">Военный</a></li>
+                            <li><a href="#" data-genre="thriller" class="genre-link">Триллер</a></li>
+                            <li><a href="#" data-genre="isekai" class="genre-link">Исекай</a></li>
+                            <li><a href="#" data-genre="isekai" class="genre-link">Этти</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" data-lang="top-rated">Топ Рейтинговые</a></li>
+                    <li><a href="Персонажи.html" data-lang="characters">Персонажи</a></li>
+                    <li><a href="Смотрю.html" data-lang="watching">Смотрю</a></li>
+                    <li><a href="Просмотрено.html" data-lang="watched">Просмотрено</a></li>
+                    <li><a href="ninoni2.html" data-lang="home">Регестрация</a></li>
+                </ul>
+             </nav>
+               <!-- Кнопка профиля в правом верхнем углу -->
+               <div class="profile-button-container">
+                <a href="Профиль.html" id="profileButton">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEPanvXdZnn4q2s9qy-GWGewQ9GQF4lSBgNw&s" alt="Аватар" id="profileAvatar" class="profile-avatar" />
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2 data-lang="hero-title">Смотри свои любимые аниме</h2>
+            <p data-lang="hero-desc">Открой для себя мир увлекательных аниме-сериалов и фильмов.</p>
+            <a href="СписокАниме.html" class="cta" data-lang="start-watching">Начать смотреть</a>
+        </div>
+    </section>
+
+    <section class="anime-grid">
+        <div class="container">
+            <h2 data-lang="popular-anime">Популярные аниме</h2>
+            <div class="grid">
+                <!-- Карточки с аниме -->
+                <div class="card" data-rating="9" >
+                    <img src="https://avatars.mds.yandex.net/get-kinopoisk-image/6201401/bfd6c4b8-2796-4727-8725-59651d2820a7/600x900" alt="Anime 1">
+                    <div class="card-content">
+                        <h3 data-lang="anime-title-1">Магическая битва 2</h3>
+                        <p data-lang="genre-1">Жанр: Экшн, Фэнтези,Магия ,Сверхъестественное,Демоны</p>
+                        <p>Рейтинг: 9</p>
+                        <p>Краткое описание: ...</p>
+                        <button class="new-tab-button">Смотреть </button>
+                        <div class="dropdown">
+                            <button onclick="openModal('https://absciss.newplayjj.com:9443/?token_movie=9e3008d4a2ef931d37403be3cdbf36&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в модальном окне</button>
+                            <button onclick="openInNewTab('https://absciss.newplayjj.com:9443/?token_movie=9e3008d4a2ef931d37403be3cdbf36&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в новой вкладке</button>
+                        </div>
+                   
+                    </div>
+                </div>
+                <div class="card"  data-rating="9.3">
+                    <img src="https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/fbcd02e1-59df-44ea-8efb-f13d5b9e6f6c/600x900" alt="Anime 2">
+                    <div class="card-content">
+                        <h3 data-lang="anime-title-2">Судьба:Ночь Схватки</h3>
+                        <p data-lang="genre-2">Жанр: Приключения, Научная фантастика</p>
+                    <p>Рейтинг: 9.3</p>
+                    <p>Краткое описание: ...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://absciss.newplayjj.com:9443/?token_movie=0a8c0d242cf787988fec7b392a1b11&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://absciss.newplayjj.com:9443/?token_movie=0a8c0d242cf787988fec7b392a1b11&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в новой вкладке</button>
+                    </div>
+                    </div>
+                </div>
+                <div class="card" data-rating="9" >
+                    <img src="https://animego.org/upload/anime/images/61c1b3551af16053020004.jpg" alt="Anime 2">
+                    <div class="card-content">
+                        <h3 data-lang="anime-title-2">Эта фарфоровая кукла влюбилась</h3>
+                        <p data-lang="genre-2">Жанр: Романтика</p>
+                    <p>Рейтинг: 9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://absciss.newplayjj.com:9443/?token_movie=4c124a26679865efd5358e2228440c&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://absciss.newplayjj.com:9443/?token_movie=4c124a26679865efd5358e2228440c&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в новой вкладке</button>
+                    </div>
+                    </div>
+                </div>
+                    <div class="card"  data-rating="8">
+                        <img src="https://cdn.azbooka.ru/cv/w1100/0e322840-7fd4-4f05-a398-9f2ad6e973ff.jpg" alt="Anime 2">
+                        <div class="card-content">
+                            <h3 data-lang="anime-title-2">Человек бензопила</h3>
+                            <p data-lang="genre-2">Жанр: Приключения,Экшн, Фэнтези,Магия ,Сверхъестественное,Демоны </p>
+                        <p>Рейтинг: 8</p>
+                        <p>Краткое описание:.</p>
+                        <button class="new-tab-button">Смотреть</button>
+                        <div class="dropdown">
+                            <button onclick="openModal('https://absciss.newplayjj.com:9443/?token_movie=25daf0dd4f81afb296b24764fddc1e&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в модальном окне</button>
+                            <button onclick="openInNewTab('https://absciss.newplayjj.com:9443/?token_movie=25daf0dd4f81afb296b24764fddc1e&token=fac0bd7232ff0009ea14c8bf3df165')">Смотреть в новой вкладке</button>
+                        </div>
+                        </div>
+                        </div>
+                    
+                        </div>  <!-- Добавь ещё карточки с аниме -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p data-lang="footer-text">© 2024 АнимеВики. Все права защищены.</p> 
+        </div>
+    </footer>
+
+    
+    <!-- Модальное окно -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <iframe id="videoFrame" width="100%" height="400" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+         // Функция для открытия модального окна
+function openModal(videoUrl) {
+        const modal = document.getElementById('videoModal');
+        const videoFrame = document.getElementById('videoFrame');
+        videoFrame.src = videoUrl;
+        modal.style.display = 'block';
+    }
+
+    // Функция для закрытия модального окна
+    function closeModal() {
+        const modal = document.getElementById('videoModal');
+        const videoFrame = document.getElementById('videoFrame');
+        videoFrame.src = '';
+        modal.style.display = 'none';
+    }
+
+    // Функция для открытия видео в новой вкладке
+    function openInNewTab(videoUrl) {
+        window.open(videoUrl, '_blank');
+    }
+
+   // Показать/скрыть выпадающее меню при нажатии на "Смотреть"
+const buttons = document.querySelectorAll('.new-tab-button');
+buttons.forEach(button => {
+    button.addEventListener('click', (event) => {
+        const dropdown = button.nextElementSibling; // Получаем следующий элемент (выпадающее меню)
+        dropdown.classList.toggle('show'); // Переключаем класс .show
+        event.stopPropagation(); // Предотвращаем закрытие при клике на кнопку
+    });
+
+    // Скрытие меню при клике вне его
+    document.addEventListener('click', (event) => {
+        if (!button.contains(event.target) && !button.nextElementSibling.contains(event.target)) {
+            const dropdown = button.nextElementSibling;
+            dropdown.classList.remove('show');
+        }
+    });
+});
+
+
+    // Закрытие модального окна при клике вне его
+    window.onclick = function(event) {
+        const modal = document.getElementById('videoModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+// Навигация
+const navLinks = document.querySelectorAll('nav ul li a');
+
+navLinks.forEach(link => {
+    link.addEventListener('click', function() {
+        // Удалить класс active у всех ссылок
+        navLinks.forEach(nav => nav.classList.remove('active'));
+        // Добавить класс active к текущей ссылке
+        this.classList.add('active');
+    });
+});
+document.getElementById('searchButton').addEventListener('click', function() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(query)) {
+            card.style.display = ''; // Показываем карточку
+        } else {
+            card.style.display = 'none'; // Скрываем карточку
+        }
+    });
+});
+
+ // Сохранение профиля
+document.getElementById('saveProfile').addEventListener('click', function() {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const email = localStorage.getItem('currentUserEmail');
+    const user = users.find(user => user.email === email);
+    const newAvatar = document.getElementById('avatar').value;
+    const newStatus = document.getElementById('status').value;
+
+    if (user) {
+        user.avatar = newAvatar; // Обновляем аватар в объекте пользователя
+        user.status = newStatus; // Обновляем статус
+
+        localStorage.setItem('users', JSON.stringify(users)); // Сохраняем изменения в localStorage
+        document.getElementById('avatarPreview').src = newAvatar; // Обновляем предварительный просмотр аватара
+
+        // Обновляем изображение на кнопке профиля
+const profileAvatar = document.getElementById('profileAvatar');
+if (profileAvatar) {
+    profileAvatar.src = newAvatar; // Изменяем аватар на кнопке профиля
+}
+
+    }
+});
+user.avatar = newAvatar; // Обновляем аватар в объекте пользователя
+localStorage.setItem('users', JSON.stringify(users)); // Сохраняем изменения в localStorage
+
+// Загрузка аватара на главной странице
+window.addEventListener('DOMContentLoaded', function() {
+    const userAvatar = localStorage.getItem('userAvatar');
+    if (userAvatar) {
+        document.getElementById('profileAvatar').src = userAvatar;
+    }
+});
+
+    </script>
+</body>
+</html>

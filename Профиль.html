@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Профиль Пользователя</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://media2.giphy.com/media/a6pzK009rlCak/200w.gif?cid=6c09b952jkc9jd5jkknrcv33fyrssinkr4uoo91bsqiq87q3&ep=v1_gifs_search&rid=200w.gif&ct=g" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        .container {
+            background-color: rgba(31, 28, 44, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            display: none; /* Скрыто по умолчанию */
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 36px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+            background-color: #2b2b2b;
+            color: #ffffff;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border: 2px solid #00ffc3;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00ffc3, #00aaff);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #00aaff;
+        }
+
+        .profile-section {
+            display: none; /* Скрыто до ввода email и пароля */
+        }
+
+        .friend-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .friend-list ul {
+            list-style-type: none;
+        }
+
+        .friend-list li {
+            margin: 5px 0;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="loginContainer">
+        <h1>Вход в Профиль</h1>
+        <div class="login-section">
+            <div class="input-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="Введите ваш email" required>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">Пароль</label>
+                <input type="password" id="loginPassword" placeholder="Введите пароль" required>
+            </div>
+            <button id="loginButton">Войти</button>
+        </div>
+    </div>
+
+    <div class="container profile-section" id="profileSection">
+        <h1>Профиль Пользователя</h1>
+        <div class="user-info" id="userInfo"></div>
+        <div class="input-group">
+            <label for="avatar">Аватар (URL)</label>
+            <input type="url" id="avatar" placeholder="URL для аватара">
+        </div>
+        <img id="avatarPreview" class="avatar-preview" src="" alt="Avatar Preview">
+        <div class="input-group">
+            <label for="status">Статус активности</label>
+            <select id="status">
+                <option value="online">Онлайн</option>
+                <option value="offline">Офлайн</option>
+                <option value="away">BUSY😒😶</option>
+            </select>
+        </div>
+        <button id="saveProfile">Сохранить Изменения</button>
+        <button id="logoutButton">Выйти</button>
+        <div class="friend-list" id="friendList"></div>
+    </div>
+
+    <script>
+               // Вход в профиль
+               document.getElementById('loginButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Предотвращаем отправку формы
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Проверка существующего пользователя
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(user => user.email === email && user.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUserEmail', email); // Сохранение текущего пользователя
+                showProfile();
+            } else {
+                alert('Неверный email или пароль!');
+            }
+        });
+
+        function showProfile() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('profileSection').style.display = 'block';
+
+            // Получение данных пользователя из localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const email = localStorage.getItem('currentUserEmail');
+
+            // Поиск пользователя по email
+            const user = users.find(user => user.email === email);
+
+            if (user) {
+                // Отображение информации о пользователе
+                const userInfo = document.getElementById('userInfo');
+                userInfo.innerHTML = `
+                    <p><strong>Имя:</strong> ${user.firstName}</p>
+                    <p><strong>Фамилия:</strong> ${user.lastName}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                `;
+                document.getElementById('avatar').value = user.avatar || '';
+                document.getElementById('status').value = user.status || 'offline';
+                document.getElementById('avatarPreview').src = user.avatar || 'https://via.placeholder.com/100';
+                loadFriends(user.friends || []);
+            }
+        }
+
+       // Сохранение профиля
+document.getElementById('saveProfile').addEventListener('click', function() {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const email = localStorage.getItem('currentUserEmail');
+    const user = users.find(user => user.email === email);
+    
+    const newAvatar = document.getElementById('avatar').value;  // Получаем URL аватара
+    const newStatus = document.getElementById('status').value;  // Статус пользователя
+
+    if (user) {
+        user.avatar = newAvatar;  // Обновляем аватар
+        user.status = newStatus;  // Обновляем статус
+
+        localStorage.setItem('users', JSON.stringify(users));  // Сохраняем изменения в localStorage
+        document.getElementById('avatarPreview').src = newAvatar;  // Обновляем аватар в предварительном просмотре
+    }
+});
+        // Загрузка списка друзей
+        function loadFriends(friends) {
+            const friendList = document.getElementById('friendList');
+            friendList.innerHTML = '<h2>Список друзей:</h2><ul></ul>';
+            const ul = friendList.querySelector('ul');
+            friends.forEach(friend => {
+                const li = document.createElement('li');
+                li.textContent = friend;
+                ul.appendChild(li);
+            });
+        }
+
+        // Обработчик для кнопки "Выйти"
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            localStorage.removeItem('currentUserEmail'); // Удаление текущего email пользователя
+            window.location.href = 'index.html'; // Переход на главную страницу
+        });
+
+        // Отображение формы входа при загрузке
+        document.getElementById('loginContainer').style.display = 'block';
+
+        // Добавление нескольких друзей для тестирования
+        const defaultFriends = ["Друг 1", "Друг 2", "Друг 3", "Друг 4", "Друг 5"];
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        if (users.length > 0) {
+            users[0].friends = defaultFriends; // Добавляем друзей первому пользователю
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        user.avatar = newAvatar; // Обновляем аватар в объекте пользователя
+localStorage.setItem('users', JSON.stringify(users)); // Сохраняем изменения в localStorage
+console.log('Current avatar:', user.avatar);
+// Сохранение аватара и статуса
+document.getElementById('saveProfile').addEventListener('click', function() {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const email = localStorage.getItem('currentUserEmail');
+    const user = users.find(user => user.email === email);
+    
+    const newAvatar = document.getElementById('avatar').value; // URL для аватара
+    const newStatus = document.getElementById('status').value;
+
+    if (user) {
+        user.avatar = newAvatar;
+        user.status = newStatus;
+
+        localStorage.setItem('users', JSON.stringify(users));
+        document.getElementById('avatarPreview').src = newAvatar;
+
+        // Синхронизация аватара с главной страницей
+        if (window.opener) {
+            window.opener.localStorage.setItem('userAvatar', newAvatar);
+            window.opener.document.getElementById('profileAvatar').src = newAvatar;
+        }
+    }
+});
+    </script>
+</body>
+</html>

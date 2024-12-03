@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список Аниме</title>
+    <link rel="icon" href="https://media2.giphy.com/media/a6pzK009rlCak/200w.gif?cid=6c09b952jkc9jd5jkknrcv33fyrssinkr4uoo91bsqiq87q3&ep=v1_gifs_search&rid=200w.gif&ct=g" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #141414;
+            color: #fff;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* Запретить выделение текста */
+        }
+        
+        header {
+            background-color: #1a1a1a;
+            padding: 38px 10px;
+            border-bottom: 1px solid #444;
+        }
+        .logo {
+            font-size: 40px;
+            color: #ff4c4c;
+            text-align: left;
+            margin: -20px 0 5px 100px;          
+        }
+        .logo span {
+            color: #fff;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content:right;
+            padding:0;
+          margin-right: 100px;
+        }
+        nav ul li {
+            position: relative;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #ff4c4c; 
+        }
+        .dropdown-menu {
+            display: none; 
+            position: absolute; 
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+            max-height: 175px; 
+            max-width: 200px;
+            overflow-y: auto; 
+            margin-left: -40px;
+            
+        }
+
+        nav ul li:hover .dropdown-menu {
+            display: block; 
+        }
+        .dropdown-menu li {
+            margin: 0;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 5px 10px;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .dropdown-menu a:hover {
+            background-color: black;
+        }
+        .dropdown-menu :focus  {
+            outline: none;
+    border-color: #ff4c4c;
+    box-shadow: 0 0 8px rgba(255, 76, 76, 0.8); /* Легкое свечение вокруг */
+        }
+       
+            .anime-grid {
+    display: grid; /* Используем сетку */
+    grid-template-columns: repeat(5, 1fr); /* 5 колонок с одинаковой шириной */
+    gap: 20px; /* Отступы между карточками */
+    padding: 20px; /* Отступы вокруг сетки */
+    justify-items: center; /* Выравнивание элементов по горизонтали */
+}
+        
+        .anime-grid h2 {
+            text-align: left;
+            margin-bottom: 50px;
+            font-size: 36px;
+            color: #ff4c4c;
+            font-weight: 600; 
+            margin-left: 40px; 
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); 
+            gap: 30px;
+            padding: 0 20px;
+        }
+        
+        .card {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    width: 225px; /* Установите фиксированную ширину  */
+    height: 330px; /* Установите фиксированную высоту  */
+    margin: 10px; /* Центрирование карточки */
+    position: relative; /* Для корректного позиционирования текста */
+    flex: 0 1 calc(20% - 10px); /* Устанавливает ширину каждой карточки на 20% минус отступ */
+    margin-bottom: 5px; /* Отступ между строками */
+    box-sizing: border-box; /* Чтобы отступы не увеличивали общую ширину карточки */
+}
+
+.card:hover {
+    transform: scale(1.05);
+    opacity: 1; /* Изображение становится полностью видимым при наведении */
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Отключить события мыши для изображений */
+    opacity: 0.6; /* Установите значение прозрачности для изображения (0.0 - 1.0) */
+    transition: opacity 0.3s; /* Добавьте плавный переход для эффекта при наведении */
+}
+
+.card-content {
+    position: absolute; /* Убедитесь, что контент расположен относительно карточки */
+    z-index: 1; /* Установите высокий z-index, чтобы текст был выше изображения */
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный фон для текста */
+    bottom: 0; /* Прижмите к низу карточки */
+    left: 0;
+    right: 0;
+    padding: 0px; /* Добавьте отступы для текста */
+    border-radius: 5px; /* Закруглите углы фона текста */
+    font-size: 0.75em ;
+    line-height: 1.2;
+    
+}
+
+        .card-content h3 {
+            margin-bottom: 3px; 
+            color: #ff4c4c;
+            font-size: 1.2em; 
+        }
+        .card-content p {
+    margin: 5px 0; /* Уменьшите отступы для параграфов */
+    font-size: 0.9em; /* Уменьшите размер шрифта для параграфов */
+}
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #444;
+        }
+        footer p {
+            margin: 0;
+        }
+        /* Модальное окно для видео */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.8); 
+        }
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 80%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .close {
+            position: absolute;
+            top: -60px;
+            right: -100px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #ff4c4c; /* Цвет при наведении */
+        }
+        nav ul li a.active {
+    color: #fff; /* Цвет текста активной ссылки */
+    background-color: #ff4c4c; /* Цвет фона активной ссылки */
+    padding: 10px 15px; /* Отступы для улучшения внешнего вида */
+    border-radius: 5px; /* Закругленные углы */
+}
+.new-tab-button {
+            background: linear-gradient(135deg, #6b5b95, #feb236);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .new-tab-button:hover {
+            background: linear-gradient(135deg, #feb236, #6b5b95);
+            transform: scale(1.05);
+        }
+
+        /* Стиль для выпадающего меню */
+       /* Стиль для выпадающего меню */
+.dropdown {
+    display: none;
+    position: pointer; /* Измените на absolute, чтобы меню позиционировалось относительно карточки */
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    padding: auto;
+    border-radius: 5px;
+    z-index: 1000;
+    top: 100%; /* Измените на 100%, чтобы меню отображалось под кнопкой */
+    left: 0;
+    width: 100%;
+}
+
+.dropdown.show {
+    display: block;
+}
+
+.dropdown button {
+    background-color: #ff4c4c;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.dropdown button:hover {
+    background-color: #feb236;
+}
+
+
+.new-tab-button,
+.new-tab-button:focus {
+    outline: none; /* Убираем стандартный стиль при фокусировке */
+}
+.search-container {
+    display: flex;
+    justify-content: flex-start;
+   margin-left: -80px;
+}
+
+#searchInput {
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    width: 220px;
+    margin-right: 10px;
+    background-color: #333;
+    color: white;
+}
+
+#searchInput:focus {
+    border-color: #ff4c4c;
+    outline: none;
+}
+
+#searchButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4c4c;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#searchButton:hover {
+    background-color: #ff1a1a;
+    transform: scale(1.05);
+}
+ 
+
+/* Контейнер для выпадающего списка */
+.controls {
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 28px;
+  
+}
+
+/* Стили для выпадающего списка */
+.styled-select {
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 2px solid   #1a1a1a;
+    background-color:  #1a1a1a ;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    width: 130px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+
+
+/* Эффект фокуса (при клике) */
+.styled-select:focus {
+    outline: none;
+    border-color: #ff4c4c;
+    box-shadow: 0 0 8px rgba(255, 76, 76, 0.8); /* Легкое свечение вокруг */
+}
+
+/* Стили для опций */
+.styled-select option {
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+}
+
+/* Стили для опций при наведении */
+.styled-select option:hover {
+    background-color: #444;
+}
+
+/* Стиль для первого элемента (placeholder) */
+.styled-select option:first-child {
+    color: #888;
+    font-style: italic;
+}
+
+/* Стили для активного состояния */
+.styled-select:active {
+    background-color: #444;
+    border-color: #ff4c4c;
+}
+
+@media (max-width: 1200px) {
+    .anime-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 карточки в ряд */
+    }
+}
+
+@media (max-width: 900px) {
+    .anime-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 карточки в ряд */
+    }
+}
+
+@media (max-width: 600px) {
+    .anime-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 карточки в ряд */
+    }
+}
+
+@media (max-width: 400px) {
+    .anime-grid {
+        grid-template-columns: 1fr; /* 1 карточка в ряд */
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Ани<span>Вики</span></div>
+        <nav>
+            <ul>
+                <li>
+                        
+                    
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Поиск аниме...">
+        <button id="searchButton" onclick="searchAnime()">Поиск</button>
+    </div>
+               
+            </li>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="#">Список аниме</a></li>
+                <li>
+                    <a href="#" data-lang="genres">Жанры</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-genre="all" class="genre-link">Все</a></li>
+                        <li><a href="#" data-genre="Экшен" class="genre-link">Экшен</a></li>
+                        <li><a href="#" data-genre="Фэнтези" class="genre-link">Фэнтези</a></li>
+                        <li><a href="#" data-genre="Романтика" class="genre-link">Романтика</a></li>
+                        <li><a href="#" data-genre="Приключения" class="genre-link">Приключения</a></li>
+                        <li><a href="#" data-genre="Драма" class="genre-link">Драма</a></li>
+                        <li><a href="#" data-genre="Комедия" class="genre-link">Комедия</a></li>
+                        <li><a href="#" data-genre="Ужасы" class="genre-link">Ужасы</a></li>
+                        <li><a href="#" data-genre="Научная фантастика" class="genre-link">Научная фантастика</a></li>
+                        <li><a href="#" data-genre="Мистика" class="genre-link">Мистика</a></li>
+                        <li><a href="#" data-genre="Повседневность" class="genre-link">Повседневность</a></li>
+                        <li><a href="#" data-genre="Психологическое" class="genre-link">Психологическое</a></li>
+                        <li><a href="#" data-genre="Сверхъестественное" class="genre-link">Сверхъестественное</a></li>
+                        <li><a href="#" data-genre="Меха" class="genre-link">Меха</a></li>
+                        <li><a href="#" data-genre="Спорт" class="genre-link">Спорт</a></li>
+                        <li><a href="#" data-genre="Исторический" class="genre-link">Исторический</a></li>
+                        <li><a href="#" data-genre="Боевые искусства" class="genre-link">Боевые искусства</a></li>
+                        <li><a href="#" data-genre="Военный" class="genre-link">Военный</a></li>
+                        <li><a href="#" data-genre="Триллер" class="genre-link">Триллер</a></li>
+                        <li><a href="#" data-genre="Музыкальный" class="genre-link">Музыкальный</a></li>
+                        <li><a href="#" data-genre="Исекай" class="genre-link">Исекай</a></li>
+                        <li><a href="#" data-genre="Sex" class="genre-link" >Этти</a></li>
+                        <li><a href="#" data-genre="Школа" class="genre-link" >Школа</a></li>
+                        <li><a href="#" data-genre="Сёнен" class="genre-link" >Сёнен</a></li>
+                        <li><a href="#" data-genre="Сэйнэн" class="genre-link" >Сэйнэн</a></li>
+                        <li><a href="#" data-genre="Триллер" class="genre-link" >Триллер</a></li>
+                        <li><a href="#" data-genre="Самураи" class="genre-link" >Самураи</a></li>
+                       <li><a href="#" data-genre="Вампиры" class="genre-link" > Вампиры</a></li>
+                       <li><a href="#" data-genre="Детектив" class="genre-link" > Детектив</a></li>
+                       <li><a href="#" data-genre="Безумие" class="genre-link" > Безумие</a></li>
+                    </ul>
+                </li>
+                
+                <li><div class="controls">
+                    <select onchange="handleSortChange(this.value)" class="styled-select">
+                        <option value="">Сортик </option>
+                        <option value="name-asc">Sort  Name (Asc)</option>
+                        <option value="name-desc">Sort  Name (Desс)</option>
+                        <option value="rating-asc">Sort  Rating (Asc)</option>
+                        <option value="rating-desc">Sort  Rating (Desc)</option>
+                    </select>
+                </div>
+                </li>
+                <li><a href="Персонажи.html">Персонажи</a></li>
+                <li><a href="Смотрю.html">Смотрю</a></li>
+                <li><a href="Просмотрено.html">Просмотрено</a></li>
+                <li><a href="сортировка2.html">сортировка№2</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="anime-grid" id="animeGrid" >
+        <h2>Список Аниме</h2>
+        <div class="grid">
+            <!-- Пример карточек аниме -->
+            <!-- Здесь добавляем 50 карточек -->
+            <div class="card" data-rating="7.8" data-genre="Экшен,Приключения, Сёнен, Фэнтези," >
+                <img src="https://anixart.net/uploads/posts/2024-07/58059.webp" alt="Аниме 1">
+                <div class="card-content">
+                    <h3>Меч и жезл Вистории</h3>
+                    <p>Жанры:  Приключения, Сёнен, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 7.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://www.youtube.com/watch?v=fykM0vDDUnU')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://www.youtube.com/watch?v=fykM0vDDUnU')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="8" data-genre="Спорт, Сёнен" >
+                <img src="https://anixart.net/uploads/posts/2024-10/4624770_jpg.webp" alt="Аниме 2">
+                <div class="card-content">
+                    <h3>Синяя тюрьма: Блю Лок 2 сезон</h3>
+                    <p>Жанры: Спорт, Сёнен</p>
+                    <p>Рейтинг: 8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="7"  data-genre="Комедия, Сверхъестественное, Сёнен, Экшен" >
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/66ebd84b4d6a1541820597.jpg" alt="Аниме 3">
+                <div class="card-content">
+                    <h3>ДанДаДан</h3>
+                    <p>Жанры: Комедия, Сверхъестественное, Сёнен, Экшен</p>
+                    <p>Рейтинг: 7</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="5" data-genre="Приключения, Сёнен, Фэнтези, Экшен">
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/6703bb3309754075224706.jpg" alt="Аниме 4">
+                <div class="card-content">
+                    <h3>Блич</h3>
+                    <p>Жанры: Приключения, Сёнен, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 5</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="4"  data-genre="Исторический, Сэйнэн">
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/6701a255a4ec9967906903.jpg" alt="Аниме 5">
+                <div class="card-content">
+                    <h3>О движении Земли</h3>
+                    <p>Жанры: Исторический, Сэйнэн</p>
+                    <p>Рейтинг: 4</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.9"  data-genre="Драма, Психологическое, Триллер, Фэнтези">
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/66df9de57702c856425275.jpg" alt="Аниме 6">
+                <div class="card-content">
+                    <h3>Re:Zero. Жизнь с нуля в альтернативном мире 3</h3>
+                    <p>Жанры: Драма, Психологическое, Триллер, Фэнтези</p>
+                    <p>Рейтинг: 9.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="7.3"  data-genre="Аниме, Боевик, Мультфильм, Фэнтези" >
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/67005cb584780459941925.jpg" alt="Аниме 7">
+                <div class="card-content">
+                    <h3>Рубеж Шангри-Ла: Любитель игрошлака бросает вызов топ-игре 2</h3>
+                    <p>Жанры: аниме, боевик, мультфильм, фэнтези</p>
+                    <p>Рейтинг: 7.3</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7.1" data-genre="Романтика, Спорт, Сёнен, Школа" >
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/66ed0f65e1934509113779.jpg" alt="Аниме 8">
+                <div class="card-content">
+                    <h3>Голубая шкатулка
+                    </h3>
+                    <p>Жанры: Романтика, Спорт, Сёнен, Школа/p>
+                    <p>Рейтинг: 7.1</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7.9" data-genre="Детектив, Комедия">
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/67046c41e61f0930984603.jpg" alt="Аниме 9">
+                <div class="card-content">
+                    <h3>Рон Камонохаси: Невменяемый детектив 2</h3>
+                    <p>Жанры:Детектив, Комедия</p>
+                    <p>Рейтинг: 7.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="5.9"  data-genre="Sex, Приключения, Фэнтези, Экшен">
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/66f8023565efc095016914.jpg" alt="Аниме 10">
+                <div class="card-content">
+                    <h3>Может, я встречу тебя в подземелье? 5</h3>
+                    <p>Жанры: Приключения, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 5.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="8.8"  data-genre="Исторический, Самураи" >
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/670af1a8b3773936691590.jpg" alt="Аниме 11">
+                <div class="card-content">
+                    <h3>Господин и пёс            </h3>
+                    <p>Жанры: Исторический, Самураи</p>
+                    <p>Рейтинг: 8.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"   data-rating="7.8"data-genre="Приключения, Фэнтези, Экшен">
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/66572c9ba0864762510315.jpg" alt="Аниме 12">
+                <div class="card-content">
+                    <h3>Пока-пока, Земля</h3>
+                    <p>Жанры:Приключения, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 7.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="9.8" data-genre="Комедия, Романтика, Школа">
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/667ed028d634f619230138.jpg" alt="Аниме 13">
+                <div class="card-content">
+                    <h3>Любовь неделима между близнецами</h3>
+                    <p>Жанры: Комедия, Романтика, Школа</p>
+                    <p>Рейтинг: 9.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="9"  data-genre="Sex, Комедия, Романтика, Школа" >
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/6682a93d5081e305658015.jpg" alt="Аниме 14">
+                <div class="card-content">
+                    <h3>Слишком много проигравших героинь!</h3>
+                    <p>Жанры:Комедия, Романтика, Школа ,Этти</p>
+                    <p>Рейтинг: 9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="9.2" data-genre="Драма, Романтика" >
+                <img src="https://animego.org/media/cache/thumbs_250x350/upload/anime/images/66794761509ca386052602.jpg" alt="Аниме 15">
+                <div class="card-content">
+                    <h3>Атри: Мои дорогие моменты</h3>
+                    <p>Жанры: Драма, Романтика</p>
+                    <p>Рейтинг: 9.2</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="9.5" data-genre=" Sex, Драма, Приключения, Фэнтези">
+                <img src="https://anixart.net/uploads/posts/2023-07/51179.webp" alt="Аниме 16">
+                <div class="card-content">
+                    <h3>Реинкарнация безработного: История о приключениях в другом мире 3 сезон</h3>
+                    <p>Жанры:  Драма, Приключения, Фэнтези, Этти</p>
+                    <p>Рейтинг: 9.5</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.8"  data-genre="Приключения, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2024-01/5230828_jpg.webp" alt="Аниме 17">
+                <div class="card-content">
+                    <h3>Поднятие уровня в одиночку</h3>
+                    <p>Жанры:Приключения, Фэнтези, Экшен </p>
+                    <p>Рейтинг: 9.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>  
+            <div class="card"  data-rating="7.8" data-genre="Драма, Меха, Романтика, Фантастика, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2022-11/thumbs/1113120_jpg.webp" alt="Аниме 18">
+                <div class="card-content">
+                    <h3>Милый во Франксе</h3>
+                    <p>Жанры:Драма, Меха, Романтика, Фантастика, Экшен </p>
+                    <p>Рейтинг: 7.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="7.2" data-genre="Детектив, Драма, Исторический">
+                <img src="https://anixart.net/uploads/posts/2023-10/poster-kusuriya-no-hitorigoto.webp" alt="Аниме 19">
+                <div class="card-content">
+                    <h3>Монолог фармацевта</h3>
+                    <p>Жанры: Детектив, Драма, Исторический</p>
+                    <p>Рейтинг: 7.2</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.3" data-genre=" Приключения, Супер сила, Сёнен, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2022-11/thumbs/647602_jpg.webp" alt="Аниме 20">
+                <div class="card-content">
+                    <h3>Хантер х Хантер</h3>
+                    <p>Жанры:  Приключения, Супер сила, Сёнен, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 9.3</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.8" data-genre="Демоны, Исторический, Сверхъестественное, Сёнен, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2022-11/1606418177_poster.webp" alt="Аниме 21">
+                <div class="card-content">
+                    <h3>Клинок, рассекающий демонов</h3>
+                    <p>Жанры: Демоны, Исторический, Сверхъестественное, Сёнен, Экшен</p>
+                    <p>Рейтинг: 9.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div> 
+            <div class="card" data-rating="9.8" data-genre="Сверхъестественное, Сёнен, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2022-11/thumbs/2040161_jpg.webp" alt="Аниме 22">
+                <div class="card-content">
+                    <h3>Человек-бензопила</h3>
+                    <p>Жанры: Сверхъестественное, Сёнен, Экшен</p>
+                    <p>Рейтинг: 9.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.3" data-genre="Приключения, Сёнен, Фэнтези, Экшен">
+                <img src="https://anixart.net/uploads/posts/2022-11/one-piece.webp" alt="Аниме 23">
+                <div class="card-content">
+                    <h3>Ван-Пис</h3>
+                    <p>Жанры: Приключения, Сёнен, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 9.3</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div> 
+            <div class="card" data-rating="9.9" data-genre="Драма, Сёнен, Школа" >
+                <img src="https://anixart.net/uploads/posts/2022-11/thumbs/963343_jpg.webp" alt="Аниме 24">
+                <div class="card-content">
+                    <h3>Форма голоса</h3>
+                    <p>Жанры: Драма, Сёнен, Школа</p>
+                    <p>Рейтинг: 9.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="8.8"  data-genre="Боевые искусства, Исторический, Сверхъестественное, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2023-09/50407.webp" alt="Аниме 25">
+                <div class="card-content">
+                    <h3>Туманный холм пяти стихий 2</h3>
+                    <p>Жанры: Боевые искусства, Исторический, Сверхъестественное, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 8.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7.9" data-genre="Повседневность, Сверхъестественное" >
+                <img src="https://anixart.net/uploads/posts/2023-11/iskusstvo-vedmy-vospominanija-ruru.webp" alt="Аниме 26">
+                <div class="card-content">
+                    <h3>Искусство ведьмы: Воспоминания Руру</h3>
+                    <p>Жанры: Повседневность, Сверхъестественное</p>
+                    <p>Рейтинг: 7.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.8"  data-genre="Триллер, Фантастика">
+                <img src="https://anixart.net/uploads/posts/2023-02/32188.webp" alt="Аниме 27">
+                <div class="card-content">
+                    <h3>Врата Штейна: Найти недостающее звено - Деление на ноль</h3>
+                    <p>Жанры: Триллер, Фантастика</p>
+                    <p>Рейтинг: 9.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="8.8" data-genre="Детектив, Исторический, Сёнен, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2024-04/55855.webp" alt="Аниме 28">
+                <div class="card-content">
+                    <h3>Тёмный дворецкий: Школа-интернат 4 сезон</h3>
+                    <p>Жанры: Детектив, Исторический, Сёнен, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 8.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="7.7" data-genre="Драма, Сверхъестественное, Сёнен, Экшен">
+                <img src="https://anixart.net/uploads/posts/2023-10/4294422_jpg.webp" alt="Аниме 29">
+                <div class="card-content">
+                    <h3>Токийские мстители: Поднебесье 3 сезон</h3>
+                    <p>Жанры: Драма, Сверхъестественное, Сёнен, Экшен</p>
+                    <p>Рейтинг: 7.7</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7.5" data-genre="Драма, Психологическое, Триллер, Школа">
+                <img src="https://anixart.net/uploads/posts/2024-01/1048155_jpg.webp" alt="Аниме 30">
+                <div class="card-content">
+                    <h3>Добро пожаловать в класс превосходства 3 сезон</h3>
+                    <p>Жанры: Драма, Психологическое, Триллер, Школа</p>
+                    <p>Рейтинг: 7.5</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="8.1" data-genre=" Приключения, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2023-12/anime2024goda.webp" alt="Аниме 31">
+                <div class="card-content">
+                    <h3>Другой мир не может противостоять силе мгновенной смерти</h3>
+                    <p>Жанры: Приключения, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 8.1</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.1" data-genre="Комедия, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2023-10/6501c1ba0e5fe561468799.webp" alt="Аниме 32">
+                <div class="card-content">
+                    <h3>Восхождение в тени! 2 сезон</h3>
+                    <p>Жанры: Комедия, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 9.1</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7.2" data-genre="Драма, Приключения, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2023-10/1235052_jpg.webp" alt="Аниме 33">
+                <div class="card-content">
+                    <h3>Герой щита 3 сезон</h3>
+                    <p>Жанры: Драма, Приключения, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 7.2</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="8" data-genre="Детектив, Комедия, Сверхъестественное, Супер сила, Сэйнэн, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2022-11/1608747879_poster.webp" alt="Аниме 34">
+                <div class="card-content">
+                    <h3>Великий из бродячих псов</h3>
+                    <p>Жанры: Детектив, Комедия, Сверхъестественное, Супер сила, Сэйнэн, Экшен</p>
+                    <p>Рейтинг: 8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7" data-genre="Вампиры, Приключения, Сверхъестественное, Сёнен, Экшен">
+                <img src="https://anixart.net/uploads/posts/2022-11/thumbs/707636_jpg.webp" alt="Аниме 35">
+                <div class="card-content">
+                    <h3>Невероятные приключения Джо Джо</h3>
+                    <p>Жанры: Вампиры, Приключения, Сверхъестественное, Сёнен, Экшен</p>
+                    <p>Рейтинг: 7</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="6.2"data-genre="Детектив, Драма, Приключения, Фэнтези, Экшен">
+                <img src="https://anixart.net/uploads/posts/2024-10/bashnja-boga-2.webp" alt="Аниме 36">
+                <div class="card-content">
+                    <h3>Башня Бога: Возвращение принца 2 сезон 1 часть</h3>
+                    <p>Жанры: Детектив, Драма, Приключения, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 6.2</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="4.3" data-genre="Аниме, Боевик, Мультфильм, Приключения, Фэнтези">
+                <img src="https://anixart.net/uploads/posts/2024-09/6339956_jpg.webp" alt="Аниме 37">
+                <div class="card-content">
+                    <h3>Плачущий призрак на пенсии</h3>
+                    <p>Жанры: аниме, боевик, мультфильм, приключения, фэнтези</p>
+                    <p>Рейтинг: 4.3</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="9.9"  data-genre="Комедия, Приключения, Фэнтези" >
+                <img src="https://anixart.net/uploads/posts/2024-07/56348.webp" alt="Аниме 38">
+                <div class="card-content">
+                    <h3>Люди подземелья</h3>
+                    <p>Жанры:  Комедия, Приключения, Фэнтези</p>
+                    <p>Рейтинг: 9.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="10" data-genre="Вампиры, Фэнтези" >
+                <img src="https://anixart.net/uploads/posts/2024-08/56179.webp" alt="Аниме 39">
+                <div class="card-content">
+                    <h3>Детская Делико</h3>
+                    <p>Жанры:Вампиры, Фэнтези</p>
+                    <p>Рейтинг: 10</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7.4" data-genre="Комедия, Романтика, Сёдзё, Фэнтези">
+                <img src="https://anixart.net/uploads/posts/2024-10/56228.webp" alt="Аниме 40">
+                <div class="card-content">
+                    <h3>Я стану злодейкой, которая войдёт в историю</h3>
+                    <p>Жанры: Комедия, Романтика, Сёдзё, Фэнтези</p>
+                    <p>Рейтинг: 7.4</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="7.9" data-genre="Драма, Сэйнэн" >
+                <img src="https://anixart.net/uploads/posts/2024-10/56662.webp" alt="Аниме 41">
+                <div class="card-content">
+                    <h3>Игра на триллион</h3>
+                    <p>Жанры:  Драма, Сэйнэн</p>
+                    <p>Рейтинг: 7.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="4.6"data-genre="Исторический, Комедия, Приключения, Самураи, Сёнен" >
+                <img src="https://anixart.net/uploads/posts/2024-07/54724.webp" alt="Аниме 42">
+                <div class="card-content">
+                    <h3>Юный лорд — мастер побега</h3>
+                    <p>Жанры: Исторический, Комедия, Приключения, Самураи, Сёнен</p>
+                    <p>Рейтинг: 4.6</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="3.9" data-genre="Исторический, Самураи, Сёнен, Экшен">
+                <img src="https://anixart.net/uploads/posts/2024-10/brodjaga-kjensin-2-2024.webp" alt="Аниме 43">
+                <div class="card-content">
+                    <h3>Бродяга Кэнсин: Беспорядки в Киото 2 сезон</h3>
+                    <p>Жанры: Исторический, Самураи, Сёнен, Экшен</p>
+                    <p>Рейтинг: 3.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="6.8" data-genre="Школа">
+                <img src="https://anixart.net/uploads/posts/2024-07/57810.webp" alt="Аниме 44">
+                <div class="card-content">
+                    <h3>Маленький гражданин</h3>
+                    <p>Жанры: Школа</p>
+                    <p>Рейтинг: 6.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card"  data-rating="8.9"data-genre="Повседневность, Сёнен, Школа" >
+                <img src="https://anixart.net/uploads/posts/2024-07/54968.webp" alt="Аниме 45">
+                <div class="card-content">
+                    <h3>Псевдогарем</h3>
+                    <p>Жанры:  Повседневность, Сёнен, Школа</p>
+                    <p>Рейтинг: 8.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="8.8" data-genre="Комедия, Сэйнэн" >
+                <img src="https://anixart.net/uploads/posts/2024-04/55911.webp" alt="Аниме 46">
+                <div class="card-content">
+                    <h3>Басня</h3>
+                    <p>Жанры: Комедия, Сэйнэн</p>
+                    <p>Рейтинг: 8.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="8.8" data-genre="Безумие, Драма, Психологическое, Романтика, Сверхъестественное, Сэйнэн, Триллер, Ужасы">
+                <img src="https://anixart.net/uploads/posts/2024-09/1378941_jpg.webp" alt="Аниме 47">
+                <div class="card-content">
+                    <h3>Спираль</h3>
+                    <p>Жанры: Безумие, Драма, Психологическое, Романтика, Сверхъестественное, Сэйнэн, Триллер, Ужасы</p>
+                    <p>Рейтинг: 8.8</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="8.9" data-genre="Исторический, Фэнтези">
+                <img src="https://anixart.net/uploads/posts/2024-10/49573.webp" alt="Аниме 48">
+                <div class="card-content">
+                    <h3>Безмолвный дом</h3>
+                    <p>Жанры: Исторический, Фэнтези </p>
+                    <p>Рейтинг: 8.9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть </button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-rating="7.7"data-genre="Фантастика, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2024-10/54853.webp" alt="Аниме 49">
+                <div class="card-content">
+                    <h3>Повелитель демонов 2099</h3>
+                    <p>Жанры: Фантастика, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 7.7</p>
+                    <p>Краткое описание:...</p>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+                    <button class="new-tab-button">Смотреть </button>
+                </div>
+            </div>
+            <div class="card" data-rating="9"data-genre="Фантастика, Фэнтези, Экшен" >
+                <img src="https://anixart.net/uploads/posts/2024-07/poster-nierautomata-ver11a-part-2.webp" alt="Аниме 50">
+                <div class="card-content">
+                    <h3>Ниер: Автомата — Версия 1.1а. Часть 2</h3>
+                    <p>Жанры: Фантастика, Фэнтези, Экшен</p>
+                    <p>Рейтинг: 9</p>
+                    <p>Краткое описание:...</p>
+                    <button class="new-tab-button">Смотреть</button>
+                    <div class="dropdown">
+                        <button onclick="openModal('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в модальном окне</button>
+                        <button onclick="openInNewTab('https://player2.anitype.fun/?player=anitype&translation=AniLibria.TV&id=57181&episode=1&startFrom=0')">Смотреть в новой вкладке</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 АнимеВики. Все права защищены.</p>
+    </footer>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <iframe id="videoFrame" width="100%" height="400" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+       
+     // Функция для открытия модального окна
+     function openModal(videoUrl) {
+        const modal = document.getElementById('videoModal');
+        const videoFrame = document.getElementById('videoFrame');
+        videoFrame.src = videoUrl;
+        modal.style.display = 'block';
+    }
+
+    // Функция для закрытия модального окна
+    function closeModal() {
+        const modal = document.getElementById('videoModal');
+        const videoFrame = document.getElementById('videoFrame');
+        videoFrame.src = '';
+        modal.style.display = 'none';
+    }
+
+    // Функция для открытия видео в новой вкладке
+    function openInNewTab(videoUrl) {
+        window.open(videoUrl, '_blank');
+    }
+
+   // Показать/скрыть выпадающее меню при нажатии на "Смотреть"
+const buttons = document.querySelectorAll('.new-tab-button');
+buttons.forEach(button => {
+    button.addEventListener('click', (event) => {
+        const dropdown = button.nextElementSibling; // Получаем следующий элемент (выпадающее меню)
+        dropdown.classList.toggle('show'); // Переключаем класс .show
+        event.stopPropagation(); // Предотвращаем закрытие при клике на кнопку
+    });
+
+    // Скрытие меню при клике вне его
+    document.addEventListener('click', (event) => {
+        if (!button.contains(event.target) && !button.nextElementSibling.contains(event.target)) {
+            const dropdown = button.nextElementSibling;
+            dropdown.classList.remove('show');
+        }
+    });
+});
+
+
+    // Закрытие модального окна при клике вне его
+    window.onclick = function(event) {
+        const modal = document.getElementById('videoModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+
+// Функция фильтрации по жанрам
+const genreLinks = document.querySelectorAll('.genre-link');
+const cards = document.querySelectorAll('.card');
+
+genreLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const genre = link.getAttribute('data-genre');
+
+        // Сбрасываем активный класс для всех ссылок
+        genreLinks.forEach(g => g.classList.remove('active'));
+        link.classList.add('active'); // Устанавливаем активный класс для текущей ссылки
+
+        cards.forEach(card => {
+            const cardGenres = card.getAttribute('data-genre').split(',').map(g => g.trim()); // Разделяем жанры и убираем лишние пробелы
+            if (genre === 'all' || cardGenres.includes(genre)) {
+                card.style.display = 'block'; // Показываем карточку
+            } else {
+                card.style.display = 'none'; // Скрываем карточку
+            }
+        });
+    });
+});
+
+// Навигация
+const navLinks = document.querySelectorAll('nav ul li a');
+
+navLinks.forEach(link => {
+    link.addEventListener('click', function() {
+        // Удалить класс active у всех ссылок
+        navLinks.forEach(nav => nav.classList.remove('active'));
+        // Добавить класс active к текущей ссылке
+        this.classList.add('active');
+    });
+});
+
+// Вызываем функцию сортировки при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    sortAnimeByRating(); // Убедитесь, что эта функция определена ранее в коде
+});
+document.getElementById('searchButton').addEventListener('click', function() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(query)) {
+            card.style.display = ''; // Показываем карточку
+        } else {
+            card.style.display = 'none'; // Скрываем карточку
+        }
+    });
+});
+function handleSortChange(value) {
+            switch (value) {
+                case 'name-asc':
+                    sortAnimeByName('asc');
+                    break;
+                case 'name-desc':
+                    sortAnimeByName('desc');
+                    break;
+                case 'rating-asc':
+                    sortAnimeByRating('asc');
+                    break;
+                case 'rating-desc':
+                    sortAnimeByRating('desc');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function sortAnimeByName(order) {
+            const grid = document.getElementById('animeGrid');
+            const cards = Array.from(grid.getElementsByClassName('card'));
+
+            cards.sort((a, b) => {
+                const nameA = a.querySelector('h3').textContent;
+                const nameB = b.querySelector('h3').textContent;
+                return order === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+            });
+
+            grid.innerHTML = '';
+            cards.forEach(card => grid.appendChild(card));
+        }
+
+        function sortAnimeByRating(order) {
+            const grid = document.getElementById('animeGrid');
+            const cards = Array.from(grid.getElementsByClassName('card'));
+
+            cards.sort((a, b) => {
+                const ratingA = parseFloat(a.getAttribute('data-rating'));
+                const ratingB = parseFloat(b.getAttribute('data-rating'));
+                return order === 'asc' ? ratingA - ratingB : ratingB - ratingA;
+            });
+
+            grid.innerHTML = '';
+            cards.forEach(card => grid.appendChild(card));
+        }
+      
+
+
+
+    </script>
+</body>
+</html>
